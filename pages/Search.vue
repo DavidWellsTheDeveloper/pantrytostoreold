@@ -1,0 +1,197 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col cols="12" class="text-center">
+        <h1>Find Recipes</h1>
+
+        <v-form
+          id="searchForm"
+          v-model="valid"
+          @submit.prevent="searchRecipes(0)"
+        >
+          <v-row>
+            <h3>Search:</h3>
+            <v-col cols="12" xl="4">
+              <v-text-field
+                v-model="query"
+                label="Search Recipes"
+                :rules="queryRules"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <h3>Options:</h3>
+            <v-col>
+              <v-checkbox
+                v-model="recipeInfo"
+                label="Include Recipe Information"
+                color="orange darken-2"
+              >
+              </v-checkbox>
+              <v-checkbox
+                v-model="recipeNutrition"
+                label="Include Recipe Nutrition"
+                color="orange darken-2"
+              >
+              </v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn color="success" type="submit" :disabled="!valid">
+                Search
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+
+        <v-row v-if="!!searchResults">
+          <v-col
+            v-for="result in searchResults.results"
+            :key="result.id"
+            cols="12"
+            xl="3"
+            lg="4"
+            md="6"
+          >
+            <v-card max-width="375" elevation="5">
+              <nuxt-link :to="'/results/' + result.id">
+                <v-img :src="result.image"></v-img>
+                <v-card-title>{{ result.title }}</v-card-title>
+              </nuxt-link>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12">
+                    <v-chip>Likes: {{ result.aggregateLikes }}</v-chip>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-divider class="my-3"></v-divider>
+                    <p v-html="result.summary"></p>
+                    <v-divider class="my-3"></v-divider>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-chip-group column>
+                    <v-chip v-if="result.readyInMinutes">
+                      <v-icon>mdi-timer-sand</v-icon>
+                      {{ result.readyInMinutes }}
+                    </v-chip>
+                    <v-chip v-if="result.vegitarian"> Vegitarian </v-chip>
+                    <v-chip v-if="result.healthScore">
+                      Health Score: {{ result.healthScore }}
+                    </v-chip>
+                    <v-chip v-if="result.weightWatcherSmartPoints">
+                      Weight Watcher Pts: {{ result.weightWatcherSmartPoints }}
+                    </v-chip>
+                  </v-chip-group>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col v-if="currentPage > 1">
+            <v-btn @click="previousPage" @:click="$vuetify.goTo('#searchForm')">
+              Previous Page
+            </v-btn>
+          </v-col>
+          <v-col v-if="totalPages > currentPage">
+            <v-btn @click="nextPage" @:click="$vuetify.goTo('#searchForm')">
+              Next Page
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+// https://spoonacular.com/food-api
+import axios from 'axios'
+export default {
+  name: 'Search',
+  data() {
+    return {
+      valid: false,
+      searchResults: null,
+      query: null,
+      recipeInfo: true,
+      recipeNutrition: false,
+      queryRules: [(value) => !!value || 'Required'],
+    }
+  },
+  computed: {
+    totalPages() {
+      if (this.searchResults) {
+        return Math.ceil(this.searchResults.totalResults / 10.0)
+      } else {
+        return 0
+      }
+    },
+    currentPage() {
+      if (this.searchResults) {
+        return Math.ceil(this.searchResults.offset / 10.0) + 1
+      } else {
+        return 0
+      }
+    },
+  },
+  methods: {
+    searchRecipes(offset) {
+      const urlPath = new URL(
+        'https://api.spoonacular.com/recipes/complexSearch'
+      )
+      urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
+      urlPath.searchParams.append('query', this.query)
+      urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
+      urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
+      urlPath.searchParams.append('offset', String(offset))
+
+      axios.get(urlPath.href).then((response) => {
+        this.searchResults = response.data
+      })
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.searchRecipes(this.searchResults.offset + 10)
+        this.top()
+      }
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.searchRecipes(this.searchResults.offset - 10)
+        this.top()
+      }
+    },
+    top() {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      })
+    },
+  },
+  head() {
+    return {
+      title: 'Search For Recipes',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Search for recipes to view. Filter recipies based on diet, ingredients, or nutrition. Save your favorite recipes for later.',
+        },
+      ],
+    }
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.v-card__text,
+.v-card__title {
+  word-break: normal; /* maybe !important  */
+}
+</style>
