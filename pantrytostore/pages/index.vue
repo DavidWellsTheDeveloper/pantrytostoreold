@@ -16,16 +16,18 @@
             Pantry To Store
           </v-card-title>
           <v-card-text>
-            <p>
-              <b>Pantry To Store</b> is an all-in-one food management solution.
-              The goal is to make <b>Pantry To Store</b> the only application
-              you need to go from finding recipes and managing dietary plans to
-              building your grocery list.
-            </p>
-            <div class="text-xs-right">
-              <em><small>&mdash; Dave Wells</small></em>
-            </div>
-            <hr class="my-3" />
+            <no-ssr>
+              <p>
+                <b>Pantry To Store</b> is an all-in-one food management
+                solution. The goal is to make <b>Pantry To Store</b> the only
+                application you need to go from finding recipes and managing
+                dietary plans to building your grocery list.
+              </p>
+              <div class="text-xs-right">
+                <em><small>&mdash; Dave Wells</small></em>
+              </div>
+              <hr class="my-3" />
+            </no-ssr>
           </v-card-text>
         </v-card>
       </v-col>

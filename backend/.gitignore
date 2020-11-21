@@ -1,0 +1,10 @@
+venv
+temp/
+temp
+*.bak
+.idea/
+
+.idea/
+.vscode
+__pycache__/
+db.sqlite3

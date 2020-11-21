@@ -54,39 +54,7 @@
             lg="4"
             md="6"
           >
-            <v-card max-width="375" elevation="5">
-              <nuxt-link :to="'/results/' + result.id">
-                <v-img :src="result.image"></v-img>
-                <v-card-title>{{ result.title }}</v-card-title>
-              </nuxt-link>
-              <v-card-text>
-                <v-row>
-                  <v-col cols="12">
-                    <v-chip>Likes: {{ result.aggregateLikes }}</v-chip>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-divider class="my-3"></v-divider>
-                    <p v-html="result.summary"></p>
-                    <v-divider class="my-3"></v-divider>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-chip-group column>
-                    <v-chip v-if="result.readyInMinutes">
-                      <v-icon>mdi-timer-sand</v-icon>
-                      {{ result.readyInMinutes }}
-                    </v-chip>
-                    <v-chip v-if="result.vegitarian"> Vegitarian </v-chip>
-                    <v-chip v-if="result.healthScore">
-                      Health Score: {{ result.healthScore }}
-                    </v-chip>
-                    <v-chip v-if="result.weightWatcherSmartPoints">
-                      Weight Watcher Pts: {{ result.weightWatcherSmartPoints }}
-                    </v-chip>
-                  </v-chip-group>
-                </v-row>
-              </v-card-text>
-            </v-card>
+            <recipe-summary :result="result" />
           </v-col>
         </v-row>
 
@@ -110,8 +78,10 @@
 <script>
 // https://spoonacular.com/food-api
 import axios from 'axios'
+import RecipeSummary from '../components/RecipeSummary.vue'
 export default {
   name: 'Search',
+  components: { RecipeSummary },
   data() {
     return {
       valid: false,
@@ -140,9 +110,7 @@ export default {
   },
   methods: {
     searchRecipes(offset) {
-      const urlPath = new URL(
-        'https://api.spoonacular.com/recipes/complexSearch'
-      )
+      const urlPath = new URL('http://localhost:8000/pantry/search')
       urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
       urlPath.searchParams.append('query', this.query)
       urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
