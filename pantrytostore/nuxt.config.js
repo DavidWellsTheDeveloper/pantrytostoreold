@@ -34,7 +34,11 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [],
+  modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
+
+  axios: {
+    baseURL: 'http://localhost:8000',
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -55,6 +59,35 @@ export default {
     },
   },
 
+  middleware: 'auth',
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/token/',
+            method: 'post',
+            propertyName: 'access',
+          },
+          logout: false,
+          user: {
+            url: '/user/users',
+            method: 'get',
+            propertyName: false,
+          },
+        },
+        // tokenRequired: true,
+        tokenType: 'Bearer',
+      },
+    },
+    redirect: {
+      login: '/MyRecipes',
+      callback: '/MyRecipes',
+      logout: '/Login',
+    },
+  },
 }
