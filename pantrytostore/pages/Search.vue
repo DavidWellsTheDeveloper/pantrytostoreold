@@ -109,16 +109,23 @@ export default {
     },
   },
   methods: {
-    searchRecipes(offset) {
-      const urlPath = new URL('/api/pantry/search')
-      urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
-      urlPath.searchParams.append('query', this.query)
-      urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
-      urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
-      urlPath.searchParams.append('offset', String(offset))
+    async searchRecipes(offset) {
+      // const urlPath = new URL('/api/pantry/search')
+      const params = {
+        apiKey: '5e819bee625f4a3b8572dde36611f257',
+        query: this.query,
+        addRecipeInformation: this.recipeInfo,
+        addRecipeNutrition: this.recipeNutrition,
+        offset: String(offset),
+      }
+      // urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
+      // urlPath.searchParams.append('query', this.query)
+      // urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
+      // urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
+      // urlPath.searchParams.append('offset', String(offset))
 
-      this.$axios.$get(urlPath.href).then((response) => {
-        this.searchResults = response.data
+      this.searchResults = await this.$axios.$get('/api/pantry/search', {
+        params,
       })
     },
     nextPage() {
