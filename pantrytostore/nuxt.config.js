@@ -37,7 +37,7 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
-    baseURL: 'http://localhost:8000',
+    baseURL: 'http://198.199.84.12:8000',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -69,13 +69,13 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/api/token/',
+            url: '/api/api/token/',
             method: 'post',
             propertyName: 'access',
           },
           logout: false,
           user: {
-            url: '/user/users',
+            url: '/api/user/users',
             method: 'get',
             propertyName: false,
           },

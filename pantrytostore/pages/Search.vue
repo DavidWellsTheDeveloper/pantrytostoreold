@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     searchRecipes(offset) {
-      const urlPath = new URL('http://localhost:8000/pantry/search')
+      const urlPath = new URL('/api/pantry/search')
       urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
       urlPath.searchParams.append('query', this.query)
       urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
