@@ -124,7 +124,7 @@ export default {
       // urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
       // urlPath.searchParams.append('offset', String(offset))
 
-      this.searchResults = await this.$axios.$get('/api/pantry/search', {
+      this.searchResults = await this.$axios.$get('/api/pantry/search/', {
         params,
       })
     },
