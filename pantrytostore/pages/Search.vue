@@ -76,8 +76,6 @@
 </template>
 
 <script>
-// https://spoonacular.com/food-api
-// import axios from 'axios'
 import RecipeSummary from '../components/RecipeSummary.vue'
 export default {
   name: 'Search',
@@ -110,7 +108,6 @@ export default {
   },
   methods: {
     async searchRecipes(offset) {
-      // const urlPath = new URL('/pantry/search')
       const params = {
         apiKey: '5e819bee625f4a3b8572dde36611f257',
         query: this.query,
@@ -118,11 +115,6 @@ export default {
         addRecipeNutrition: this.recipeNutrition,
         offset: String(offset),
       }
-      // urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
-      // urlPath.searchParams.append('query', this.query)
-      // urlPath.searchParams.append('addRecipeInformation', this.recipeInfo)
-      // urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
-      // urlPath.searchParams.append('offset', String(offset))
 
       this.searchResults = await this.$axios.$get('/pantry/search/', {
         params,

@@ -37,6 +37,7 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
+    // baseURL: 'http://localhost:8000',
     baseURL: 'https://pantry.focowebsites.com/api',
   },
 
