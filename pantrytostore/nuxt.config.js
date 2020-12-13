@@ -37,7 +37,7 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
-    baseURL: 'http://198.199.84.12:8000',
+    baseURL: 'http://198.199.84.12',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
