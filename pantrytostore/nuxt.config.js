@@ -37,7 +37,7 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
-    baseURL: 'https://pantry.focowebsites.com',
+    baseURL: 'https://pantry.focowebsites.com/api',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -69,13 +69,13 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/api/api/token/',
+            url: '/api/token/',
             method: 'post',
             propertyName: 'access',
           },
           logout: false,
           user: {
-            url: '/api/user/users',
+            url: '/user/users',
             method: 'get',
             propertyName: false,
           },

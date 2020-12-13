@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     async searchRecipes(offset) {
-      // const urlPath = new URL('/api/pantry/search')
+      // const urlPath = new URL('/pantry/search')
       const params = {
         apiKey: '5e819bee625f4a3b8572dde36611f257',
         query: this.query,
@@ -124,7 +124,7 @@ export default {
       // urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
       // urlPath.searchParams.append('offset', String(offset))
 
-      this.searchResults = await this.$axios.$get('/api/pantry/search/', {
+      this.searchResults = await this.$axios.$get('/pantry/search/', {
         params,
       })
     },
