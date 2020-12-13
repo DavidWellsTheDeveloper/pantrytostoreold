@@ -77,7 +77,7 @@
 
 <script>
 // https://spoonacular.com/food-api
-import axios from 'axios'
+// import axios from 'axios'
 import RecipeSummary from '../components/RecipeSummary.vue'
 export default {
   name: 'Search',
@@ -117,7 +117,7 @@ export default {
       urlPath.searchParams.append('addRecipeNutrition', this.recipeNutrition)
       urlPath.searchParams.append('offset', String(offset))
 
-      axios.get(urlPath.href).then((response) => {
+      this.$axios.$get(urlPath.href).then((response) => {
         this.searchResults = response.data
       })
     },
