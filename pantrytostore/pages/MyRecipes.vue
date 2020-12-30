@@ -39,14 +39,9 @@ export default {
     this.getMyRecipes()
   },
   methods: {
-    getMyRecipes() {
-      // console.log(JSON.stringify(this.$store.state.auth.user))
-      const urlPath = new URL('http://localhost:8000/pantry/myrecipes/')
-      // const myHeaders = new Headers()
-      // const headers = { Authorization: this.$store.getToken('local') }
-      this.$axios.get(urlPath.href).then((response) => {
-        this.myRecipes = response.data
-      })
+    async getMyRecipes() {
+      const response = await this.$axios.get('/pantry/myrecipes/')
+      this.myRecipes = response.data
     },
   },
 }

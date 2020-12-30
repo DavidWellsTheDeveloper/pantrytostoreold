@@ -37,7 +37,8 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
-    baseURL: 'http://localhost:8000',
+    // baseURL: 'http://localhost:8000',
+    baseURL: 'https://pantry.focowebsites.com/api',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

@@ -15,7 +15,16 @@
         <v-btn color="primary" @click="SaveRecipe">Save Recipe</v-btn>
       </v-col>
       <v-col v-if="already_saved">
-        <h3>You've already saved this recipe!</h3>
+        <v-alert
+          v-model="already_saved"
+          border="left"
+          close-text="Close Alert"
+          color="error"
+          dark
+          dismissible
+        >
+          You've already saved this recipe
+        </v-alert>
       </v-col>
     </v-row>
     <v-row>
@@ -141,34 +150,36 @@ export default {
     this.getRecipe()
   },
   methods: {
-    getRecipe() {
+    async getRecipe() {
       const urlPath = new URL(
         'https://api.spoonacular.com/recipes/' + this.id + '/information'
       )
+      const params = {
+        apiKey: '5e819bee625f4a3b8572dde36611f257',
+        includeNutrition: false,
+      }
       urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
       urlPath.searchParams.append('includeNutrition', false)
 
-      this.$axios.get(urlPath.href).then((response) => {
-        this.recipe = response.data
-      })
+      const response = await this.$axios.$get(
+        'https://api.spoonacular.com/recipes/' + this.id + '/information',
+        { params }
+      )
+      this.recipe = response
     },
-    SaveRecipe() {
-      const urlPath = new URL('http://localhost:8000/pantry/myrecipes/')
-      const data = {
+    async SaveRecipe() {
+      // const urlPath = new URL('pantry/myrecipes/')
+      const params = {
         recipe_id: this.id,
         user: this.$auth.user.id,
       }
-
-      this.$axios
-        .post(urlPath.href, data)
-        .then((response) => {
-          this.saved_alert = true
-        })
-        .catch((err) => {
-          if (err.status === 500) {
-            this.already_saved = true
-          }
-        })
+      try {
+        const response = await this.$axios.$post('pantry/myrecipes/', params)
+        if (response.status === 201) this.saved_alert = true
+      } catch (err) {
+        console.log(err)
+        this.already_saved = true
+      }
     },
     addIngredients() {
       const urlPath = new URL('http://localhost:8000/pantry/grocery/')
