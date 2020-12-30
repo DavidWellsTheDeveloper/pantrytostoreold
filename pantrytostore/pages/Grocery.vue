@@ -5,13 +5,22 @@
         <h1>Grocery List</h1>
       </v-col>
       <v-col v-for="item in groceryList" :key="item.id" cols="12">
-        <Ingredient :grocery-ingredient="item" class="my-0 py-0" />
+        <v-checkbox
+          v-model="selected"
+          :label="item.description"
+          :value="item.id"
+        ></v-checkbox>
       </v-col>
     </v-row>
     <v-row>
-      <v-btn color="success" @click="checkAll()">Check All Items</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn color="error" @click="clearChecked()">Clear Checked Items</v-btn>
+      <v-btn class="my-2" color="success" @click="checkAll()"
+        >Check All Items</v-btn
+      >
+    </v-row>
+    <v-row>
+      <v-btn class="my-2" color="error" @click="clearChecked()"
+        >Clear Checked Items</v-btn
+      >
     </v-row>
   </v-container>
 </template>
@@ -22,6 +31,7 @@ export default {
   data() {
     return {
       groceryList: null,
+      selected: [],
     }
   },
   mounted() {
@@ -29,38 +39,27 @@ export default {
   },
   methods: {
     getGroceryList() {
-      const urlPath = new URL('http://localhost:8000/pantry/grocery/')
-
-      this.$axios.get(urlPath.href).then((response) => {
+      this.$axios.get('/pantry/grocery/').then((response) => {
         this.groceryList = response.data
       })
     },
     clearChecked() {
-      this.groceryList.forEach((item) => {
-        if (item.completed) {
-          const urlPath = new URL(
-            'http://localhost:8000/pantry/grocery/' + item.id + '/'
-          )
-
-          this.$axios.delete(urlPath.href).then((response) => {
+      this.selected.forEach((item) => {
+        this.$axios
+          .$delete('/pantry/grocery/' + item + '/')
+          .then((response) => {
             this.getGroceryList()
           })
-        }
       })
+    },
+    checkItem(item) {
+      if (!this.selected.includes(item.id)) {
+        this.selected.push(item.id)
+      }
     },
     checkAll() {
       this.groceryList.forEach((item) => {
-        if (!item.completed) {
-          const urlPath = new URL(
-            'http://localhost:8000/pantry/grocery/' + item.id + '/'
-          )
-          const data = {
-            completed: true,
-          }
-          this.$axios.patch(urlPath.href, data).then((response) => {
-            this.getGroceryList()
-          })
-        }
+        this.checkItem(item)
       })
     },
   },

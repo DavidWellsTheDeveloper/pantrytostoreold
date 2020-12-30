@@ -41,15 +41,12 @@ export default {
       if (newValue == null) {
         newValue = false
       }
-      const urlPath = new URL(
-        'http://localhost:8000/pantry/grocery/' +
-          this.groceryIngredient.id +
-          '/'
-      )
       const data = {
         completed: newValue,
       }
-      this.$axios.patch(urlPath.href, data).then((response) => {})
+      this.$axios
+        .$patch(`/pantry/grocery/${this.groceryIngredient.id}/`, data)
+        .then((response) => {})
     },
   },
 }
