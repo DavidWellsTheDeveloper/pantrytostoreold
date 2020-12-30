@@ -78,6 +78,7 @@
 <script>
 import RecipeSummary from '../components/RecipeSummary.vue'
 export default {
+  auth: false,
   name: 'Search',
   components: { RecipeSummary },
   data() {
