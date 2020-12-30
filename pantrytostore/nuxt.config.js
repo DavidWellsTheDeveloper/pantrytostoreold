@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const development = process.env.NODE_ENV !== 'production'
+
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
@@ -37,8 +39,9 @@ export default {
   modules: ['@nuxtjs/auth', '@nuxtjs/axios', '@nuxt/http'],
 
   axios: {
-    // baseURL: 'http://localhost:8000',
-    baseURL: 'https://pantry.focowebsites.com/api',
+    baseURL: development
+      ? 'http://localhost:8000'
+      : 'https://pantry.focowebsites.com/api',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -67,7 +70,14 @@ export default {
 
   auth: {
     strategies: {
+      // JWT token auth
       local: {
+        token: {
+          property: 'access',
+        },
+        user: {
+          property: 'username',
+        },
         endpoints: {
           login: {
             url: '/api/token/',
@@ -85,10 +95,9 @@ export default {
         tokenType: 'Bearer',
       },
     },
-    redirect: {
-      login: '/MyRecipes',
-      callback: '/MyRecipes',
-      logout: '/Login',
-    },
+  },
+  router: {
+    // By default, views will require login.
+    middleware: ['auth'],
   },
 }
