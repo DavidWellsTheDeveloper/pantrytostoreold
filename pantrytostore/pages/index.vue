@@ -13,7 +13,7 @@
         </div>
         <v-card color="info">
           <v-card-title class="headline text-center">
-            Pantry To Store
+            <h3>Pantry To Store</h3>
           </v-card-title>
           <v-card-text>
             <no-ssr>
@@ -29,6 +29,9 @@
               <hr class="my-3" />
             </no-ssr>
           </v-card-text>
+          <v-card-title v-if="$auth.loggedIn" class="headline text-center">
+            Welcome {{ $auth.user.username }}
+          </v-card-title>
         </v-card>
       </v-col>
     </v-row>
