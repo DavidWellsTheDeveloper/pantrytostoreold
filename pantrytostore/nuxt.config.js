@@ -75,9 +75,6 @@ export default {
         token: {
           property: 'access',
         },
-        user: {
-          property: 'username',
-        },
         endpoints: {
           login: {
             url: '/api/token/',
@@ -86,7 +83,7 @@ export default {
           },
           logout: false,
           user: {
-            url: '/user/users',
+            url: '/user/users/',
             method: 'get',
             propertyName: false,
           },
