@@ -174,7 +174,7 @@ export default {
         user: this.$auth.user.id,
       }
       try {
-        const response = await this.$axios.$post('pantry/myrecipes/', params)
+        const response = await this.$axios.$post('/pantry/myrecipes/', params)
         if (response.status === 201) this.saved_alert = true
       } catch (err) {
         console.log(err)
@@ -182,7 +182,7 @@ export default {
       }
     },
     addIngredients() {
-      const urlPath = new URL('http://localhost:8000/pantry/grocery/')
+      const urlPath = new URL('/pantry/grocery/')
       this.ingredientsSelected.forEach((ingredient) => {
         const data = {
           ingredient_id: ingredient.id,
