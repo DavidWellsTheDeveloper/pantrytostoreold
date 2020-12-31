@@ -161,11 +161,11 @@ export default {
       urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
       urlPath.searchParams.append('includeNutrition', false)
 
-      const response = await this.$axios.$get(
+      const response = await this.$axios.get(
         'https://api.spoonacular.com/recipes/' + this.id + '/information',
         { params }
       )
-      this.recipe = response
+      this.recipe = response.data
     },
     async SaveRecipe() {
       // const urlPath = new URL('pantry/myrecipes/')
@@ -174,7 +174,7 @@ export default {
         user: this.$auth.user.id,
       }
       try {
-        const response = await this.$axios.$post('/pantry/myrecipes/', params)
+        const response = await this.$axios.post('/pantry/myrecipes/', params)
         if (response.status === 201) this.saved_alert = true
       } catch (err) {
         console.log(err)
@@ -182,7 +182,6 @@ export default {
       }
     },
     addIngredients() {
-      const urlPath = new URL('/pantry/grocery/')
       this.ingredientsSelected.forEach((ingredient) => {
         const data = {
           ingredient_id: ingredient.id,
@@ -193,7 +192,7 @@ export default {
           user: this.$auth.user.id,
         }
         if (ingredient != null) {
-          this.$axios.post(urlPath.href, data).then((response) => {
+          this.$axios.post('/pantry/grocery/', data).then((response) => {
             this.dialog = false
           })
         }
