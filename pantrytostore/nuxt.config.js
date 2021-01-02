@@ -41,7 +41,7 @@ export default {
   axios: {
     baseURL: development
       ? 'http://localhost:8000'
-      : 'https://pantry.focowebsites.com/api',
+      : 'https://pantrytostore.com/api',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
