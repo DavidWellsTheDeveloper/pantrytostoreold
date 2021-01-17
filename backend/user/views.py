@@ -1,9 +1,11 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from .serializers import UserSerializer
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -20,3 +22,8 @@ class UserDetail(viewsets.ModelViewSet):
     instance = request.user
     serializer = self.get_serializer(instance)
     return Response(serializer.data)
+
+class CreateUserView(CreateAPIView):
+  permission_classes = [AllowAny]
+  model = get_user_model()
+  serializer_class = UserSerializer

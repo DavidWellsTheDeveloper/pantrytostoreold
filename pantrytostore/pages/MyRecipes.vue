@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <v-container class="text-center">
     <h1>My Recipes</h1>
-    <v-row>
+    <v-row v-if="myRecipes.length >= 1">
       <v-col v-for="recipe in myRecipes" :key="recipe.id" cols="12" lg="6">
         <nuxt-link :to="'/results/' + recipe.id">
           <v-card>
@@ -18,6 +18,17 @@
             </v-card-text>
           </v-card>
         </nuxt-link>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col>
+        <v-card class="mx-auto px-4 py-4" max-width="600">
+          <h1>Let's Get Started!</h1>
+          <p>It looks like you don't have any recipes yet...</p>
+          <v-btn type="link" color="info" to="/search">
+            Search for Recipes
+          </v-btn>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

@@ -24,12 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'vo49jmrj@6*unw5a18kc@9k=!lg(f&w#&8lc4ok$i^kei6=8*o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'pantry.focowebsites.com',
     'pantrytostore.com',
 ]
 
