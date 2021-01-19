@@ -52,7 +52,7 @@ class SavedRecipesViewSet(viewsets.ModelViewSet):
 
 
 class SearchViewset(viewsets.GenericViewSet):
-
+  authentication_classes= []
   def list(self, request):
     url = 'https://api.spoonacular.com/recipes/complexSearch'
     apiKey = '5e819bee625f4a3b8572dde36611f257'
