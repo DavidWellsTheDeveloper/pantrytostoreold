@@ -165,6 +165,19 @@ export default {
       })
     },
   },
+  head() {
+    return {
+      title: 'Register',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Register for Pantry To Store. Search for and save recipes, manage grocery lists and more.',
+        },
+      ],
+    }
+  },
 }
 </script>
 

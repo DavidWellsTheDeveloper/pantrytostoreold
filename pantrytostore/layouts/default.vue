@@ -123,7 +123,8 @@ export default {
   },
   head() {
     return {
-      titleTemplate: '%s - Pantry To Store',
+      title: 'Food Management Solution',
+      titleTemplate: 'Pantry To Store | %s',
       meta: [
         {
           hid: 'description',

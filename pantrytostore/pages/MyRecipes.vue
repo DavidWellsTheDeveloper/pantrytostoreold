@@ -55,6 +55,18 @@ export default {
       this.myRecipes = response.data
     },
   },
+  head() {
+    return {
+      title: 'My Recipes',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'View your recipes',
+        },
+      ],
+    }
+  },
 }
 </script>
 
