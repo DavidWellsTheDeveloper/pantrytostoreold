@@ -43,6 +43,8 @@ import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
+  auth: false,
+  name: 'Home',
   components: {
     Logo,
     VuetifyLogo,
@@ -50,6 +52,16 @@ export default {
   head() {
     return {
       title: 'Home',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Pantry To Store is an all-in-one food management solution. ' +
+            'The goal is to make Pantry To Store the only application you need to ' +
+            'go from finding recipes and managing dietary plans to building your grocery list.',
+        },
+      ],
     }
   },
 }

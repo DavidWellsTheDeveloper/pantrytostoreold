@@ -85,6 +85,18 @@ export default {
       this.$auth.logout()
     },
   },
+  head() {
+    return {
+      title: 'Login',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Login to manage your own recipes, food, and ingredients',
+        },
+      ],
+    }
+  },
 }
 </script>
 

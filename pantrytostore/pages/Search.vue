@@ -143,7 +143,7 @@ export default {
   },
   head() {
     return {
-      title: 'Search For Recipes',
+      title: 'Search Recipes',
       meta: [
         {
           hid: 'description',

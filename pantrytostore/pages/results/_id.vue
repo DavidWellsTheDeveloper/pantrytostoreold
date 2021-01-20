@@ -199,6 +199,21 @@ export default {
       })
     },
   },
+  head() {
+    return {
+      title: this.recipe.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Pantry To Store is an all-in-one food management solution. ' +
+            'The goal is to make Pantry To Store the only application you need to ' +
+            'go from finding recipes and managing dietary plans to building your grocery list.',
+        },
+      ],
+    }
+  },
 }
 </script>
 
