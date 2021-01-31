@@ -19,8 +19,8 @@ class SavedRecipes(models.Model):
 
 
 class GroceryListItem(models.Model):
-  ingredient_id = models.IntegerField()
-  amount = models.FloatField()
+  ingredient_id = models.IntegerField(null=True)
+  amount = models.FloatField(null=True)
   unit = models.CharField(max_length=50, null=True, blank=True)
   description = models.CharField(max_length=100, default="")
   completed = models.BooleanField(default=False)
