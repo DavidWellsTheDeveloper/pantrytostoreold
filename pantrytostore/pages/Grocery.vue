@@ -41,13 +41,13 @@
     <v-row>
       <v-col class="text-left">
         <v-btn class="my-2" color="success" @click="checkAll()"
-          >Check All Items</v-btn
+          >Check All</v-btn
         >
       </v-col>
       <v-spacer></v-spacer>
       <v-col class="text-right">
         <v-btn class="my-2" color="error" @click="clearChecked()"
-          >Clear Checked Items</v-btn
+          >Clear Checked</v-btn
         >
       </v-col>
     </v-row>
