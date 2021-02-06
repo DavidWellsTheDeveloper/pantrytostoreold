@@ -7,10 +7,6 @@
     ></v-parallax>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6">
-        <div class="text-center">
-          <logo />
-          <vuetify-logo />
-        </div>
         <v-card color="info">
           <v-card-title class="headline text-center">
             <h3>Pantry To Store</h3>
@@ -19,9 +15,9 @@
             <no-ssr>
               <p>
                 <b>Pantry To Store</b> is an all-in-one food management
-                solution. The goal is to make <b>Pantry To Store</b> the only
-                application you need to go from finding recipes and managing
-                dietary plans to building your grocery list.
+                solution. The goal is to make Pantry To Store the only
+                application you need to find recipes and manage dietary plans
+                and build a shopping list.
               </p>
               <div class="text-xs-right">
                 <em><small>&mdash; Dave Wells</small></em>
@@ -39,16 +35,9 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
   auth: false,
   name: 'Home',
-  components: {
-    Logo,
-    VuetifyLogo,
-  },
   head() {
     return {
       title: 'Home',

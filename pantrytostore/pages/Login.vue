@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="!$auth.loggedIn" width="400" class="mx-auto mt-5">
+    <v-card width="400" class="mx-auto mt-5">
       <v-card-title>
         <h1 class="display-1 mx-auto">Login</h1>
       </v-card-title>
@@ -36,22 +36,12 @@
         </v-form>
       </v-card-text>
     </v-card>
-
-    <v-card v-else width="400" class="mx-auto mt-5">
-      <v-card-title>
-        <h1 class="mx-auto display-1">Logout</h1>
-      </v-card-title>
-      <v-card-actions>
-        <v-btn color="error" class="mx-auto" @click="logoutUser">
-          Logout
-        </v-btn>
-      </v-card-actions>
-    </v-card>
   </div>
 </template>
 
 <script>
 export default {
+  auth: false,
   name: 'Login',
   data() {
     return {
@@ -79,10 +69,8 @@ export default {
             'Authorization',
             'Bearer ' + resp.data.access
           )
+          if (resp.status === 200) this.$router.push({ name: 'index' })
         })
-    },
-    logoutUser() {
-      this.$auth.logout()
     },
   },
   head() {

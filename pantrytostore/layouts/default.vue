@@ -33,6 +33,14 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="logout()">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <v-list v-else>
         <v-list-item
@@ -101,17 +109,12 @@ export default {
           title: 'My Recipes',
           to: '/MyRecipes',
         },
-        {
-          icon: 'mdi-account-circle',
-          title: 'Logout',
-          to: '/Login',
-        },
       ],
       itemsNotLoggedIn: [
         {
           icon: 'mdi-account-circle',
           title: 'Login',
-          to: '/Login',
+          to: '/login',
         },
         {
           icon: 'mdi-account-check-outline',
@@ -120,6 +123,12 @@ export default {
         },
       ],
     }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
+      this.$router.push({ name: 'login' })
+    },
   },
   head() {
     return {
