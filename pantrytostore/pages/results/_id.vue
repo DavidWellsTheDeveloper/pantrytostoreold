@@ -1,46 +1,18 @@
 <template>
   <v-container v-if="!!recipe">
     <v-row class="text-center">
-      <v-spacer></v-spacer>
-      <v-col>
-        <v-img max-width="750" :src="recipe.image"></v-img>
-      </v-col>
-      <v-spacer></v-spacer>
       <v-col cols="12">
         <h1>{{ recipe.title }}</h1>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <v-btn color="primary" @click="SaveRecipe">Save Recipe</v-btn>
-      </v-col>
-      <v-col v-if="already_saved">
-        <v-alert
-          v-model="already_saved"
-          border="left"
-          close-text="Close Alert"
-          color="error"
-          dark
-          dismissible
-        >
-          You've already saved this recipe
-        </v-alert>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-alert
-          v-model="saved_alert"
-          border="left"
-          close-text="Close Alert"
-          color="deep-purple accent-4"
-          dark
-          dismissible
-        >
-          Recipe Saved!
-        </v-alert>
-      </v-col>
-    </v-row>
+    <RecipeEdit
+      v-if="recipe && instructions && ingredients"
+      :editing="editing"
+      :recipe="recipe"
+      :ingredients="ingredients"
+      :instructions="instructions"
+      @ToggleEditing="editing = !editing"
+    ></RecipeEdit>
     <v-row>
       <v-col cols="12">
         <v-tabs v-model="tab">
@@ -48,74 +20,23 @@
             {{ item }}
           </v-tab>
           <v-tab-item>
-            <v-card>
-              <v-card-title>Ingredients:</v-card-title>
-              <v-card-text>
-                <ul>
-                  <li
-                    v-for="ingredient in recipe.extendedIngredients"
-                    :key="ingredient.id"
-                  >
-                    {{ ingredient.amount }} {{ ingredient.unit }}
-                    {{ ingredient.name }}
-                  </li>
-                </ul>
-              </v-card-text>
-              <v-btn
-                v-if="$auth.loggedIn"
-                color="info"
-                class="mx-3 my-3"
-                @click="dialog = !dialog"
-              >
-                Add Ingredients to Grocery List
-              </v-btn>
-            </v-card>
-            <v-dialog
-              v-model="dialog"
-              max-width="800"
-              :opacity="opacity"
-              scrollable
-            >
-              <v-card>
-                <v-card-title primary-title>Add Ingredients:</v-card-title>
-                <v-card-text>
-                  <v-form @submit.prevent="addIngredients()">
-                    <v-checkbox
-                      v-for="(ingredient, index) in recipe.extendedIngredients"
-                      :key="ingredient.id"
-                      v-model="ingredientsSelected[index]"
-                      :label="ingredient.originalString"
-                      :value="ingredient"
-                    ></v-checkbox>
-                    <v-row>
-                      <v-btn type="submit" color="success">
-                        Add Selected
-                      </v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn color="error" @click="dialog = false">
-                        Cancel
-                      </v-btn>
-                    </v-row>
-                  </v-form>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
+            <ViewIngredients
+              :ingredients="ingredients"
+              @ingredientUpdated="$fetch()"
+            ></ViewIngredients>
           </v-tab-item>
           <v-tab-item>
             <v-card>
               <v-card-title> Instructions: </v-card-title>
               <v-card-text>
-                <section
-                  v-for="(instruction, index) in recipe.analyzedInstructions"
-                  :key="index"
-                >
-                  <h4 v-if="instruction.name">{{ instruction.name }}</h4>
-                  <ol>
-                    <li v-for="step in instruction.steps" :key="step.number">
-                      {{ step.step }}
-                    </li>
-                  </ol>
-                </section>
+                <ol>
+                  <li
+                    v-for="instruction in instructions"
+                    :key="instruction.instruction_id"
+                  >
+                    {{ instruction.instruction }}
+                  </li>
+                </ol>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -128,9 +49,24 @@
 <script>
 export default {
   name: 'RecipeDetails',
+  async fetch() {
+    this.ingredients = await this.$axios.$get(
+      `/pantry/ingredients/?recipe=${this.$route.params.id}`
+    )
+    this.instructions = await this.$axios.$get(
+      `/pantry/instructions/?recipe=${this.$route.params.id}`
+    )
+  },
+  async asyncData({ params, $axios }) {
+    const recipe = await $axios.$get(`/pantry/myrecipes/${params.id}/`)
+    return { recipe }
+  },
   data() {
     return {
-      recipe: null,
+      // recipe (via asyncData)
+      ingredients: null,
+      instructions: null,
+      editing: false,
       tab: null,
       tabs: ['ingredients', 'directions'],
       saved_alert: false,
@@ -146,45 +82,11 @@ export default {
       return this.$route.params.id
     },
   },
-  mounted() {
-    this.getRecipe()
-  },
   methods: {
-    async getRecipe() {
-      const urlPath = new URL(
-        'https://api.spoonacular.com/recipes/' + this.id + '/information'
-      )
-      const params = {
-        apiKey: '5e819bee625f4a3b8572dde36611f257',
-        includeNutrition: false,
-      }
-      urlPath.searchParams.append('apiKey', '5e819bee625f4a3b8572dde36611f257')
-      urlPath.searchParams.append('includeNutrition', false)
-
-      const response = await this.$axios.get(
-        'https://api.spoonacular.com/recipes/' + this.id + '/information',
-        { params }
-      )
-      this.recipe = response.data
-    },
-    async SaveRecipe() {
-      // const urlPath = new URL('pantry/myrecipes/')
-      const params = {
-        recipe_id: this.id,
-        user: this.$auth.user.id,
-      }
-      try {
-        const response = await this.$axios.post('/pantry/myrecipes/', params)
-        if (response.status === 201) this.saved_alert = true
-      } catch (err) {
-        console.log(err)
-        this.already_saved = true
-      }
-    },
     addIngredients() {
       this.ingredientsSelected.forEach((ingredient) => {
         const data = {
-          ingredient_id: ingredient.id,
+          ingredient_id: ingredient.ingredient_id,
           amount: ingredient.amount,
           unit: ingredient.unit,
           description: ingredient.originalString,

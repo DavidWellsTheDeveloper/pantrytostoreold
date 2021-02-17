@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from .serializers import UserSerializer
@@ -12,6 +13,7 @@ from django.contrib.auth import get_user_model
 
 class UserDetail(viewsets.ModelViewSet):
   permission_classes = [IsAuthenticated]
+  authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
   serializer_class = UserSerializer
 
   def get_queryset(self):

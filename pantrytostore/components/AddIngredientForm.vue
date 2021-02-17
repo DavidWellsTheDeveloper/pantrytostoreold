@@ -1,16 +1,11 @@
 <template>
   <v-form v-model="valid" @submit.prevent="addIngredient()">
     <v-text-field
+      ref="ingredient"
       v-model="ingredient.description"
       label="Item"
       :rules="descriptionRules"
     ></v-text-field>
-    <!-- <v-text-field
-      v-model="ingredient.amount"
-      label="Amount"
-      type="number"
-    ></v-text-field>
-    <v-text-field v-model="ingredient.unit" label="Unit"></v-text-field> -->
     <v-btn color="success" type="submit" :disabled="!valid"> Submit </v-btn>
   </v-form>
 </template>
@@ -30,13 +25,21 @@ export default {
       descriptionRules: [(value) => !!value || 'Required'],
     }
   },
+  mounted() {
+    this.focusInput()
+  },
   methods: {
     addIngredient() {
       this.$axios.post('/pantry/grocery/', this.ingredient).then((resp) => {
         if (resp.status === 201) {
+          this.ingredient.description = null
           this.$emit('ingredientAdded')
         }
       })
+    },
+    focusInput() {
+      console.log('Focus Input')
+      this.$nextTick(() => this.$refs.ingredient.focus())
     },
   },
 }
