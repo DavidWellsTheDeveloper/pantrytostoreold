@@ -15,14 +15,14 @@
         </nuxt-link>
       </v-col>
     </v-row>
-    <v-row v-else>
+    <v-row>
       <v-col>
         <v-card class="mx-auto px-4 py-4" max-width="600">
-          <h1>Let's Get Started!</h1>
-          <p>It looks like you don't have any recipes yet...</p>
-          <v-btn type="link" color="info" to="/search">
-            Search for Recipes
-          </v-btn>
+          <h1>Add a new recipe</h1>
+          <v-card-text v-if="recipes.length < 1">
+            It looks like you don't have any recipes yet...
+          </v-card-text>
+          <v-btn color="info" to="/createrecipe"> Add a recipe </v-btn>
         </v-card>
       </v-col>
     </v-row>

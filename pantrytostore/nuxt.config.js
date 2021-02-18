@@ -79,7 +79,11 @@ export default {
             method: 'post',
             propertyName: 'access',
           },
-          refresh: { url: 'api/token/refresh/', method: 'post' },
+          refreshToken: {
+            url: 'api/token/refresh/',
+            method: 'post',
+            property: 'refresh',
+          },
           logout: false,
           user: {
             url: '/user/users/',
@@ -87,15 +91,7 @@ export default {
             propertyName: false,
           },
         },
-        // tokenRequired: true,
-        tokenType: 'Bearer',
       },
-    },
-    redirect: {
-      login: '/login',
-      logout: '/login',
-      callback: '/index',
-      home: '/index',
     },
   },
   router: {
