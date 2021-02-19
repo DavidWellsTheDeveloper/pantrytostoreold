@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1>My Recipes</h1>
-    <v-row v-if="recipes.length >= 1">
+    <v-row v-if="!!recipes">
       <v-col v-for="recipe in recipes" :key="recipe.id" cols="12" lg="6">
         <nuxt-link :to="'/results/' + recipe.recipe_id">
           <v-card>
@@ -19,7 +19,7 @@
       <v-col>
         <v-card class="mx-auto px-4 py-4" max-width="600">
           <h1>Add a new recipe</h1>
-          <v-card-text v-if="recipes.length < 1">
+          <v-card-text v-if="recipes.length === 0">
             It looks like you don't have any recipes yet...
           </v-card-text>
           <v-btn color="info" to="/createrecipe"> Add a recipe </v-btn>
