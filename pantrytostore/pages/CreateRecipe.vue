@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-xs>
-    <!-- <RecipeEdit :recipe="recipe"></RecipeEdit> -->
+    <h1>New Recipe</h1>
     <v-row>
       <v-col>
         <v-text-field
@@ -107,8 +107,9 @@ export default {
         summary: this.recipe.summary,
         user: this.recipe.user,
       }
-      const response = await this.$axios.$post('/pantry/myrecipes/', payload)
-      this.createChildren(response.recipe_id)
+      const response = await this.$axios.post('/pantry/myrecipes/', payload)
+      await this.createChildren(response.data.recipe_id)
+      this.$router.push(`/results/${response.data.recipe_id}/`)
     },
 
     createChildren(recipeId) {
@@ -118,7 +119,7 @@ export default {
           instruction: item.instruction,
           recipe: recipeId,
         }
-        this.$axios.$post('/pantry/instructions/', instruction)
+        this.$axios.post('/pantry/instructions/', instruction)
       })
 
       this.ingredients.forEach((item, index) => {
@@ -128,7 +129,7 @@ export default {
           name: item.name,
           recipe: recipeId,
         }
-        this.$axios.$post('/pantry/ingredients/', ingredient)
+        this.$axios.post('/pantry/ingredients/', ingredient)
       })
     },
   },

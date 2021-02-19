@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-xs>
-    <h1>Create Recipe</h1>
+    <h1>{{ recipe.recipe_id !== null ? 'Update' : 'Create' }} Recipe</h1>
     <v-form v-model="valid" @submit.prevent="SubmitRecipe()">
       <v-row>
         <v-col>
@@ -18,7 +18,7 @@
         </v-col>
       </v-row>
       <v-btn color="success" type="submit" :disabled="!valid">
-        {{ recipe.recipe_id ? 'Update' : 'Create' }}
+        {{ recipe.recipe_id !== null ? 'Update' : 'Create' }}
       </v-btn>
     </v-form>
   </v-container>
