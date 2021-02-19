@@ -5,6 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'grocery', views.GroceryListViewSet, basename='Grocery')
-router.register(r'myrecipes', views.SavedRecipesViewSet, basename='MyRecipes')
-router.register(r'search', views.SearchViewset, basename='search')
+router.register(r'myrecipes', views.RecipeViewSet, basename='MyRecipes')
+router.register(r'ingredients', views.IngredientViewset, basename='Ingredients')
+router.register(r'instructions', views.InstructionViewset, basename='Instructions')
 urlpatterns = router.urls

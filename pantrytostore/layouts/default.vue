@@ -124,12 +124,14 @@ export default {
       ],
     }
   },
+
   methods: {
     logout() {
       this.$auth.logout()
       this.$router.push({ name: 'login' })
     },
   },
+
   head() {
     return {
       title: 'Food Management Solution',

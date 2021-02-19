@@ -7,16 +7,30 @@ from django.db.models import UniqueConstraint
 
 # Create your models here.
 
-class SavedRecipes(models.Model):
-  recipe_id = models.CharField(max_length=10)
+class Recipe(models.Model):
+  recipe_id = models.AutoField(primary_key=True)
+  title = models.CharField(max_length=300)
+  summary = models.CharField(max_length=2000, null=True, blank=True)
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-  class Meta:
-    constraints = [
-      UniqueConstraint(fields=['recipe_id', 'user'], name='unique_saved')
-    ]
   def __str__(self):
-    return f"{self.recipe_id}"
+    return f"{self.title}"
 
+class Ingredient(models.Model):
+  ingredient_id = models.AutoField(primary_key=True)
+  recipe = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE)
+  name = models.CharField(max_length=500)
+  amount = models.FloatField(null=True, blank=True)
+  unit = models.CharField(max_length=100, null=True, blank=True)
+  def __str__(self):
+    return f"{self.amount} {self.unit}   {self.name}"
+
+class Instruction(models.Model):
+  instruction_id = models.AutoField(primary_key=True)
+  recipe = models.ForeignKey(Recipe, related_name='instructions', on_delete=models.CASCADE)
+  step = models.IntegerField()
+  instruction = models.CharField(max_length=2000)
+  def __str__(self):
+    return f"{self.instruction}"
 
 class GroceryListItem(models.Model):
   ingredient_id = models.IntegerField(null=True)

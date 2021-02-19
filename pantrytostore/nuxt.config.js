@@ -19,10 +19,10 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@/assets/css/style.scss'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['~/plugins/auth.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -72,14 +72,17 @@ export default {
     strategies: {
       // JWT token auth
       local: {
-        token: {
-          property: 'access',
-        },
+        scheme: 'refresh',
         endpoints: {
           login: {
             url: '/api/token/',
             method: 'post',
             propertyName: 'access',
+          },
+          refreshToken: {
+            url: 'api/token/refresh/',
+            method: 'post',
+            property: 'refresh',
           },
           logout: false,
           user: {
@@ -88,8 +91,6 @@ export default {
             propertyName: false,
           },
         },
-        // tokenRequired: true,
-        tokenType: 'Bearer',
       },
     },
   },

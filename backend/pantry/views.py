@@ -3,15 +3,21 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
+from url_filter.integrations.drf import DjangoFilterBackend
 import urllib
 import requests
+
 from .serializers import (
   GroceryListSerializer, 
-  SavedRecipesSerializer,
+  RecipeSerializer,
+  IngredientSerializer,
+  InstructionSerializer,
 )
 from .models import (
   GroceryListItem, 
-  SavedRecipes,
+  Recipe,
+  Ingredient,
+  Instruction,
 )
 
 # Create your views here.
@@ -22,34 +28,28 @@ class GroceryListViewSet(viewsets.ModelViewSet):
     user = self.request.user
     return GroceryListItem.objects.filter(user=user)
 
-class SavedRecipesViewSet(viewsets.ModelViewSet):
-  # permission_classes = [IsAuthenticated]
+class RecipeViewSet(viewsets.ModelViewSet):
   authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
-  serializer_class = SavedRecipesSerializer
+  serializer_class = RecipeSerializer
   def get_queryset(self):
     user = self.request.user
-    if user.is_staff and self.request.GET.get('results') == "all":
-      return SavedRecipes.objects.all()
-    else:
-      return SavedRecipes.objects.filter(user=user)
-  def list(self, request):
-    user = self.request.user
-    ids = []
-    url = 'https://api.spoonacular.com/recipes/informationBulk'
-    apiKey = '5e819bee625f4a3b8572dde36611f257'
-    recipes = SavedRecipes.objects.filter(user=user)
-    for recipe in recipes:
-      ids.append(recipe.recipe_id)
-    idstring = ','.join(ids)
-    print(idstring)
-    queryDict = {}
-    queryDict['apiKey'] = apiKey
-    queryDict['ids'] = idstring
-    print(type(queryDict))
-    response = requests.get(url, params=queryDict)
-    return JsonResponse(response.json(), safe=False)
+    return Recipe.objects.filter(user=user)
 
+class IngredientViewset(viewsets.ModelViewSet):
+  authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
+  serializer_class = IngredientSerializer
+  filter_backends = [DjangoFilterBackend]
+  filter_fields = ['recipe', 'name']
+  def get_queryset(self):
+    return Ingredient.objects.all()
 
+class InstructionViewset(viewsets.ModelViewSet):
+  authentication_classes = [SessionAuthentication, TokenAuthentication, JWTAuthentication]
+  serializer_class = InstructionSerializer
+  filter_backends = [DjangoFilterBackend]
+  filter_fields = ['recipe', 'instruction', 'step']
+  def get_queryset(self):
+    return Instruction.objects.all()
 
 class SearchViewset(viewsets.GenericViewSet):
   authentication_classes= []

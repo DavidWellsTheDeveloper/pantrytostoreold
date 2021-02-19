@@ -1,33 +1,28 @@
 <template>
-  <v-container class="text-center">
+  <v-container>
     <h1>My Recipes</h1>
-    <v-row v-if="myRecipes.length >= 1">
-      <v-col v-for="recipe in myRecipes" :key="recipe.id" cols="12" lg="6">
-        <nuxt-link :to="'/results/' + recipe.id">
+    <v-row v-if="recipes.length >= 1">
+      <v-col v-for="recipe in recipes" :key="recipe.id" cols="12" lg="6">
+        <nuxt-link :to="'/results/' + recipe.recipe_id">
           <v-card>
-            <v-img
-              :src="recipe.image"
-              width="200"
-              class="float-left mx-5"
-            ></v-img>
             <v-card-title primary-title>
               <h2>{{ recipe.title }}</h2>
             </v-card-title>
             <v-card-text>
-              <ResultChips :result="recipe" />
+              {{ recipe.summary }}
             </v-card-text>
           </v-card>
         </nuxt-link>
       </v-col>
     </v-row>
-    <v-row v-else>
+    <v-row>
       <v-col>
         <v-card class="mx-auto px-4 py-4" max-width="600">
-          <h1>Let's Get Started!</h1>
-          <p>It looks like you don't have any recipes yet...</p>
-          <v-btn type="link" color="info" to="/search">
-            Search for Recipes
-          </v-btn>
+          <h1>Add a new recipe</h1>
+          <v-card-text v-if="recipes.length < 1">
+            It looks like you don't have any recipes yet...
+          </v-card-text>
+          <v-btn color="info" to="/createrecipe"> Add a recipe </v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -35,26 +30,13 @@
 </template>
 
 <script>
-import ResultChips from '@/components/ResultChips.vue'
 export default {
   name: 'MyRecipes',
-  components: {
-    ResultChips,
+  async asyncData({ $axios }) {
+    const recipes = await $axios.$get('/pantry/myrecipes/')
+    return { recipes }
   },
-  data() {
-    return {
-      myRecipes: {},
-    }
-  },
-  mounted() {
-    this.getMyRecipes()
-  },
-  methods: {
-    async getMyRecipes() {
-      const response = await this.$axios.get('/pantry/myrecipes/')
-      this.myRecipes = response.data
-    },
-  },
+
   head() {
     return {
       title: 'My Recipes',

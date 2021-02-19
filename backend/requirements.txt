@@ -1,5 +1,6 @@
 Django
 djangorestframework
 django-cors-headers
+django-url-filter
 djangorestframework-simplejwt
 gunicorn
