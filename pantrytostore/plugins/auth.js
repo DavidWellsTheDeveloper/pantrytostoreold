@@ -12,11 +12,9 @@ export default function ({ $axios, app, error }, inject) {
 
     // for authorization errors, check if secret key rotated
     const authErr = [401, 403].includes(parseInt(axiosError.response.status))
-    console.log(authErr)
     if (app.$auth.loggedIn && authErr) {
       app.$auth.refreshTokens().catch(() => {
         // eslint-disable-next-line no-console
-        console.log('Token refresh failed, logging user out')
         app.$auth.logout()
       })
     }
