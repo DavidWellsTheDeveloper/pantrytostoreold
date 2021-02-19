@@ -1,39 +1,24 @@
 <template>
-  <v-container>
-    <v-btn
-      :color="editing ? 'error' : 'warning'"
-      text
-      @click="$emit('ToggleEditing')"
-    >
-      <v-icon>{{ editIcon }}</v-icon> {{ editText }}
-    </v-btn>
-    <v-form v-if="editing" v-model="valid">
+  <v-container grid-list-xs>
+    <h1>Create Recipe</h1>
+    <v-form v-model="valid" @submit.prevent="SubmitRecipe()">
       <v-row>
-        <v-col cols="12" md="6">
-          <v-text-field v-model="recipe.title" label="Title"></v-text-field>
-        </v-col>
-        <v-col cols="12">
+        <v-col>
+          <v-text-field
+            v-model="recipe.title"
+            :rules="titleRules"
+            label="Recipe Title"
+          ></v-text-field>
           <v-textarea
             v-model="recipe.summary"
             outlined
-            label="Summary"
+            :rules="summaryRules"
+            label="Recipe Summary"
           ></v-textarea>
         </v-col>
-        <!-- <v-col
-          v-for="ingredient in ingredients"
-          :key="ingredient.ingredient_id"
-          cols="12"
-        >
-          <IngredientEdit :ingredient="ingredient"></IngredientEdit>
-        </v-col> -->
       </v-row>
-      <v-row>
-        <v-col>
-          <v-btn color="success" @click="addIngredient()">Add Ingredient</v-btn>
-        </v-col>
-      </v-row>
-      <v-btn color="success" :disabled="!valid" @click="updateRecipe()">
-        Submit Changes
+      <v-btn color="success" type="submit" :disabled="!valid">
+        {{ recipe.recipe_id ? 'Update' : 'Create' }}
       </v-btn>
     </v-form>
   </v-container>
@@ -46,52 +31,50 @@ export default {
       type: Object,
       required: true,
     },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    instructions: {
-      type: Array,
-      required: true,
-    },
-    editing: Boolean,
+  },
+  async fetch() {
+    this.ingredients = await this.$axios.$get(
+      `/pantry/ingredients/?recipe=${this.$route.params.id}`
+    )
+    this.instructions = await this.$axios.$get(
+      `/pantry/instructions/?recipe=${this.$route.params.id}`
+    )
   },
   data() {
     return {
       valid: false,
+      titleRules: [(value) => !!value || 'Title Required'],
+      summaryRules: [(value) => !!value || 'Summary Required'],
+      ingredients: [],
+      instructions: [],
     }
   },
-  computed: {
-    editText() {
-      return this.editing ? 'CANCEL' : 'EDIT TITLE & SUMMARY'
-    },
-    editIcon() {
-      return this.editing ? 'mdi-cancel' : 'mdi-pencil'
-    },
-  },
+
   methods: {
-    addIngredient() {
-      const payload = {
-        name: 'New Ingredient',
-        amount: null,
-        unit: null,
-        recipe: this.recipe.recipe_id,
+    async SubmitRecipe() {
+      if (this.recipe.recipe_id === null) {
+        const recipePayload = {
+          title: this.recipe.title,
+          summary: this.recipe.summary,
+          user: this.recipe.user,
+        }
+        const response = await this.$axios.post(
+          '/pantry/myrecipes/',
+          recipePayload
+        )
+        this.recipe = response.data
+      } else {
+        const recipePayload = {
+          recipe_id: this.recipe.recipe_id,
+          title: this.recipe.title,
+          summary: this.recipe.summary,
+          user: this.recipe.user,
+        }
+        await this.$axios.$put(
+          `/pantry/myrecipes/${this.recipe.recipe_id}`,
+          recipePayload
+        )
       }
-      this.$axios.post('/pantry/ingredients/', payload)
-    },
-    updateRecipe() {
-      const payload = {
-        title: this.recipe.title,
-        summary: this.recipe.summary,
-        user: this.$auth.user.id,
-      }
-      this.$axios
-        .put(`/pantry/myrecipes/${this.$route.params.id}/`, payload)
-        .then((response) => {
-          if (response.status === 200) {
-            this.$emit('ToggleEditing')
-          }
-        })
     },
   },
 }

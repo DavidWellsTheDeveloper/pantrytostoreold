@@ -1,18 +1,37 @@
 <template>
   <v-container v-if="!!recipe">
-    <v-row class="text-center">
-      <v-col cols="12">
-        <h1>{{ recipe.title }}</h1>
+    <v-row>
+      <v-col>
+        <v-btn text color="info" @click="editing = !editing">
+          {{ editing ? 'Cancel changes' : 'Edit Title & Summary' }}
+          <v-icon>
+            mdi-{{ editing ? 'close-circle-outline' : 'pencil-outline' }}
+          </v-icon>
+        </v-btn>
       </v-col>
     </v-row>
-    <RecipeEdit
-      v-if="recipe && instructions && ingredients"
-      :editing="editing"
-      :recipe="recipe"
-      :ingredients="ingredients"
-      :instructions="instructions"
-      @ToggleEditing="editing = !editing"
-    ></RecipeEdit>
+    <v-row v-if="!editing" class="text-center">
+      <v-col cols="12">
+        <h1>{{ recipe.title }}</h1>
+        <v-divider></v-divider>
+        <p>{{ recipe.summary }}</p>
+      </v-col>
+    </v-row>
+    <v-row v-if="editing">
+      <v-col>
+        <RecipeEdit
+          v-if="recipe && instructions && ingredients"
+          :editing="editing"
+          :recipe="recipe"
+          :ingredients="ingredients"
+          :instructions="instructions"
+          @recipeUpdated="
+            updateRecipe()
+            editing = false
+          "
+        ></RecipeEdit>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col cols="12">
         <v-tabs v-model="tab">
@@ -23,6 +42,7 @@
             <ViewIngredients
               :ingredients="ingredients"
               @ingredientUpdated="$fetch()"
+              @recipeUpdated="updateRecipe()"
             ></ViewIngredients>
           </v-tab-item>
           <v-tab-item>
@@ -99,6 +119,11 @@ export default {
           })
         }
       })
+    },
+    async updateRecipe() {
+      this.recipe = await this.$axios.$get(
+        `/pantry/myrecipes/${this.$route.params.id}/`
+      )
     },
   },
   head() {
