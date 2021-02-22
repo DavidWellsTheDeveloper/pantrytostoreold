@@ -92,11 +92,6 @@ export default {
           title: 'Welcome',
           to: '/',
         },
-        {
-          icon: 'mdi-text-box-search',
-          title: 'Find Recipes',
-          to: '/search',
-        },
       ],
       itemsLoggedIn: [
         {
@@ -108,6 +103,11 @@ export default {
           icon: 'mdi-text-box-multiple',
           title: 'My Recipes',
           to: '/MyRecipes',
+        },
+        {
+          icon: 'mdi-plus-box',
+          title: 'Add Recipes',
+          to: '/AddRecipes',
         },
       ],
       itemsNotLoggedIn: [
