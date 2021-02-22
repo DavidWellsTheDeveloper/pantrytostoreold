@@ -122,9 +122,14 @@ export default {
           to: '/MyRecipes',
         },
         {
-          icon: 'mdi-plus-box',
-          title: 'Add Recipes',
+          icon: 'mdi-application-import',
+          title: 'Import Recipes',
           to: '/AddRecipes',
+        },
+        {
+          icon: 'mdi-plus-box',
+          title: 'Create Recipe',
+          to: '/CreateRecipe',
         },
       ],
       itemsNotLoggedIn: [
