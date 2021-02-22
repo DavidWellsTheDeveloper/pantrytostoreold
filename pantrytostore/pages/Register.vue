@@ -161,7 +161,7 @@ export default {
     onSubmit() {
       this.$axios.post('/user/create/', this.user).then((resp) => {
         // TODO confirm success before redirecting to login.
-        this.$router.push({ name: 'login' })
+        this.$router.push({ name: 'Login' })
       })
     },
   },
