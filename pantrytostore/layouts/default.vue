@@ -1,11 +1,19 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer v-model="drawer" clipped app>
+    <v-navigation-drawer
+      v-model="drawer"
+      :expand-on-hover="$vuetify.breakpoint.mdAndUp"
+      :permanent="$vuetify.breakpoint.mdAndUp"
+      app
+      dark
+      color="primary"
+    >
       <v-list>
         <v-list-item
           v-for="(item, i) in itemsCommon"
           :key="i"
           :to="item.to"
+          :color="activeLinkColor"
           router
           exact
         >
@@ -16,6 +24,18 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="toggleDarkTheme()">
+          <v-list-item-action>
+            <v-icon>
+              {{
+                $vuetify.theme.dark ? 'mdi-brightness-5' : 'mdi-weather-night'
+              }}
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Change Theme</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-divider></v-divider>
       </v-list>
       <v-list v-if="$auth.loggedIn">
@@ -23,6 +43,7 @@
           v-for="(item, i) in itemsLoggedIn"
           :key="i"
           :to="item.to"
+          :color="activeLinkColor"
           router
           exact
         >
@@ -47,6 +68,7 @@
           v-for="(item, i) in itemsNotLoggedIn"
           :key="i"
           :to="item.to"
+          :color="activeLinkColor"
           router
           exact
         >
@@ -59,9 +81,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar clipped-left app>
+    <v-app-bar v-if="$vuetify.breakpoint.smAndDown" clipped-left app>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <ThemeChooser class="mx-5 mt-auto" />
       <v-toolbar-title v-text="title" />
     </v-app-bar>
     <v-main>
@@ -69,18 +90,14 @@
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer absolute app>
+    <v-footer app>
       <span>&copy; PantryToStore {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import ThemeChooser from '@/components/ThemeChooser.vue'
 export default {
-  components: {
-    ThemeChooser,
-  },
   data() {
     return {
       title: 'Pantry To Store',
@@ -122,6 +139,7 @@ export default {
           to: '/Register',
         },
       ],
+      activeLinkColor: 'secondary',
     }
   },
 
@@ -129,6 +147,9 @@ export default {
     logout() {
       this.$auth.logout()
       this.$router.push({ name: 'login' })
+    },
+    toggleDarkTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
   },
 

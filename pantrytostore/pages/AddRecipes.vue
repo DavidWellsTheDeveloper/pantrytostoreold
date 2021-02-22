@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="justify-space-around">
       <v-col cols="12" md="8" lg="6">
-        <v-card>
+        <v-card shaped color="primary">
           <v-card-title primary-title class="justify-center">
             Would you rather add your own recipe?
           </v-card-title>

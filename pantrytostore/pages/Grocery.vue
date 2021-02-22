@@ -40,9 +40,7 @@
     </v-row>
     <v-row>
       <v-col class="text-left">
-        <v-btn class="my-2" color="success" @click="checkAll()"
-          >Check All</v-btn
-        >
+        <v-btn class="my-2" color="info" @click="checkAll()">Check All</v-btn>
       </v-col>
       <v-spacer></v-spacer>
       <v-col class="text-right">

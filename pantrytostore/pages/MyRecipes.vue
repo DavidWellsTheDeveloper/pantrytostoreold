@@ -1,17 +1,25 @@
 <template>
   <v-container>
-    <v-row class="mb-5">
-      <v-col>
-        <v-card class="mx-auto px-4 py-4" max-width="600">
-          <h1>Add a new recipe</h1>
-          <v-btn block color="info" to="/createrecipe"> Add a recipe </v-btn>
+    <v-row justify="space-around" class="mb-5">
+      <v-col cols="12" md="6" lg="4">
+        <v-card shaped color="info" class="mx-auto px-4 py-4" max-width="600">
+          <h1>Add your own recipe</h1>
+          <v-btn block color="primary" to="/CreateRecipe"> Add a recipe </v-btn>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6" lg="4">
+        <v-card shaped color="info" class="mx-auto px-4 py-4" max-width="600">
+          <h1>Import a Recipe From a Website</h1>
+          <v-btn block color="primary" to="/AddRecipes">
+            Import a Recipe
+          </v-btn>
         </v-card>
       </v-col>
     </v-row>
     <h1>My Recipes</h1>
     <v-row v-if="!!recipes">
       <v-col v-for="recipe in recipes" :key="recipe.id" cols="12" md="6" lg="4">
-        <v-card>
+        <v-card shaped color="accent">
           <nuxt-link :to="'/results/' + recipe.recipe_id">
             <v-card-title primary-title>
               <h2>{{ recipe.title }}</h2>
