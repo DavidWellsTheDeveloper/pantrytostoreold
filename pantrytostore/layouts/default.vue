@@ -21,9 +21,10 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
         <v-list-item @click="toggleDarkTheme()">
           <v-list-item-action>
             <v-icon>
@@ -38,6 +39,7 @@
         </v-list-item>
         <v-divider></v-divider>
       </v-list>
+
       <v-list v-if="$auth.loggedIn">
         <v-list-item
           v-for="(item, i) in itemsLoggedIn"
@@ -51,9 +53,10 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
         <v-list-item @click="logout()">
           <v-list-item-action>
             <v-icon>mdi-account-circle</v-icon>
@@ -63,6 +66,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
       <v-list v-else>
         <v-list-item
           v-for="(item, i) in itemsNotLoggedIn"
@@ -76,19 +80,18 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
     <v-app-bar v-if="$vuetify.breakpoint.smAndDown" clipped-left app>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-main>
     <v-footer app>
       <span>&copy; PantryToStore {{ new Date().getFullYear() }}</span>
