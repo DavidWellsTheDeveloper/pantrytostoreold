@@ -40,7 +40,7 @@
         <v-divider></v-divider>
       </v-list>
 
-      <v-list v-if="$auth.loggedIn">
+      <v-list v-show="$auth.loggedIn">
         <v-list-item
           v-for="(item, i) in itemsLoggedIn"
           :key="i"
@@ -67,7 +67,7 @@
         </v-list-item>
       </v-list>
 
-      <v-list v-else>
+      <v-list v-show="!$auth.loggedIn">
         <v-list-item
           v-for="(item, i) in itemsNotLoggedIn"
           :key="i"
@@ -139,7 +139,7 @@ export default {
         {
           icon: 'mdi-account-circle',
           title: 'Login',
-          to: '/login',
+          to: '/Login',
         },
         {
           icon: 'mdi-account-check-outline',
@@ -154,7 +154,7 @@ export default {
   methods: {
     logout() {
       this.$auth.logout()
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'Login' })
     },
     toggleDarkTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark

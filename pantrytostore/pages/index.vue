@@ -18,14 +18,15 @@
               to find recipes and manage dietary plans and build a shopping
               list.
             </p>
-            <div class="text-xs-right">
+            <p class="text-xs-right">
               <em><small>&mdash; Dave Wells</small></em>
-            </div>
+            </p>
             <hr class="my-3" />
           </v-card-text>
           <v-card-title v-if="$auth.loggedIn" class="headline text-center">
-            Welcome {{ $auth.user.username }}
+            Welcome {{ $auth.user.first_name }}
           </v-card-title>
+          <v-card-title v-else></v-card-title>
         </v-card>
       </v-col>
     </v-row>
