@@ -74,13 +74,16 @@
 <script>
 export default {
   name: 'MyRecipes',
-  async asyncData({ $axios }) {
-    const recipes = await $axios.$get('/pantry/myrecipes/')
-    return { recipes }
+
+  // Fetch (rather than asyncData) to avoid page error when permission fails
+  async fetch() {
+    this.recipes = await this.$axios.$get('/pantry/myrecipes/')
   },
+
   data() {
     return {
       dialog: false,
+      recipes: null,
     }
   },
   methods: {
