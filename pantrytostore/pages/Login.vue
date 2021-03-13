@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-card width="400" class="mx-auto mt-5">
       <v-card-title>
         <h1 class="display-1 mx-auto">Login</h1>
@@ -23,20 +23,27 @@
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"
           ></v-text-field>
-          <v-row justify="space-between">
+          <v-row>
             <v-col>
               <v-btn color="info" :disabled="!valid" type="submit">
                 Login
               </v-btn>
             </v-col>
-            <v-col class="text-right">
-              <v-btn type="link" to="/Register" color="success">Register</v-btn>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn type="link" small text to="/Register" color="error">
+                Need an account? Register.
+              </v-btn>
             </v-col>
           </v-row>
         </v-form>
       </v-card-text>
+      <v-alert v-if="loginError" dense text type="error">
+        {{ loginErrorMessage }}
+      </v-alert>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -53,10 +60,14 @@ export default {
         username: '',
         password: '',
       },
+      loginError: false,
+      loginErrorMessage:
+        'Something went wrong when logging in. Check your Username & Password, and try again.',
     }
   },
   methods: {
     loginUser() {
+      this.loginError = false
       this.$auth
         .loginWith('local', {
           data: this.login,
@@ -70,6 +81,10 @@ export default {
             'Bearer ' + resp.data.access
           )
           if (resp.status === 200) this.$router.push({ name: 'index' })
+        })
+        .catch((error) => {
+          console.log(error)
+          this.loginError = true
         })
     },
   },

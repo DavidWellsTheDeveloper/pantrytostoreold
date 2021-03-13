@@ -96,14 +96,14 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row justify="space-between">
             <v-col>
+              <v-btn color="error" type="link" to="/login">Cancel</v-btn>
+            </v-col>
+            <v-col class="text-right">
               <v-btn color="info" :disabled="!valid" type="submit">
                 Register
               </v-btn>
-            </v-col>
-            <v-col class="text-right">
-              <v-btn color="success" type="link" to="/login"> Login </v-btn>
             </v-col>
           </v-row>
         </v-form>
