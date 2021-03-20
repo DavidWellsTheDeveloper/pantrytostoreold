@@ -31,7 +31,7 @@
               :key="ingredient.ingredient_id"
               v-model="ingredientsSelected[index]"
               :label="ingredient.name"
-              :value="ingredient.name"
+              :value="ingredient"
             ></v-checkbox>
             <v-row>
               <v-btn type="submit" color="success"> Add Selected </v-btn>
@@ -42,6 +42,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-alert :value="alert" dismissible dark type="success">
+      Your items were successfully added to your
+      <v-btn color="secondary" text to="/Grocery/">
+        <v-icon>mdi-cart-variant</v-icon>Grocery List</v-btn
+      >.
+    </v-alert>
   </v-container>
 </template>
 
@@ -58,7 +64,27 @@ export default {
       ingredientsSelected: [],
       dialog: false,
       opacity: 0.5,
+      alert: false,
     }
+  },
+  methods: {
+    addIngredients() {
+      this.ingredientsSelected.forEach((ingredient) => {
+        const payload = {
+          ingredient_id: ingredient.ingredient_id,
+          amount: ingredient.amount,
+          unit: ingredient.unit,
+          description: ingredient.name,
+          user: this.$auth.user.id,
+        }
+        this.$axios.post('/pantry/grocery/', payload).then((resp) => {
+          if (resp.status === 201) {
+            this.dialog = false
+            this.alert = true
+          }
+        })
+      })
+    },
   },
 }
 </script>
