@@ -46,12 +46,12 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" lg="5">
-          <!-- <v-btn color="success" :disabled="!valid" type="submit">
+          <v-btn color="success" :disabled="!valid" type="submit">
             Extract Recipe
-          </v-btn> -->
-          <v-btn color="success" disabled type="submit">
-            This feature is currently in development
           </v-btn>
+          <!-- <v-btn color="success" disabled type="submit">
+            This feature is currently in development
+          </v-btn> -->
         </v-col>
       </v-row>
     </v-form>
@@ -87,8 +87,12 @@ export default {
       return url.protocol === 'http:' || url.protocol === 'https:'
     },
 
-    extractRecipe() {
-      console.log('asdf')
+    async extractRecipe() {
+      const payload = {
+        url: this.extractUrl,
+      }
+      const response = await this.$axios.post('/pantry/extractrecipe/', payload)
+      console.log(response)
     },
 
     isValidHttpUrl(string) {

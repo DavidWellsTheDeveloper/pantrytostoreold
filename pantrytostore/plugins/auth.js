@@ -12,7 +12,6 @@ export default function ({ app }) {
 
     // for authorization errors, check if secret key rotated
     const authErr = [401, 403].includes(parseInt(axiosError.response.status))
-    console.log(app.$auth)
     if (app.$auth.$state.loggedIn && authErr) {
       app.$auth.logout()
     }
