@@ -55,6 +55,52 @@
         </v-col>
       </v-row>
     </v-form>
+    <v-card v-if="recipe">
+      <v-card-title primary-title>
+        <v-img :src="recipe.image.url"></v-img>
+        {{ recipe.headline }}
+      </v-card-title>
+      <v-card-text>
+        {{ recipe.description }}
+        <v-divider></v-divider>
+        <v-list shaped>
+          <v-subheader>Ingredients</v-subheader>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(ingredient, index) in ingredients"
+              :key="index"
+              v-html="ingredient"
+            >
+            </v-list-item>
+          </v-list-item-group>
+          <v-subheader>Instructions</v-subheader>
+          <v-list-item-group>
+            <v-list-item
+              v-for="(instruction, index) in instructions"
+              :key="index"
+            >
+              {{ instruction.text }}
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card-text>
+      <v-card-actions v-if="recipe">
+        <v-btn color="success" :disabled="!validRecipe" @click="CreateRecipe()">
+          Save Recipe
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-alert
+      v-else
+      v-model="recipeNotFound"
+      border="left"
+      close-text="Close Alert"
+      color="deep-purple accent-4"
+      dark
+      dismissible
+    >
+      Sorry, but we were unable to extract the website. Please try another.
+    </v-alert>
   </v-container>
 </template>
 
@@ -68,11 +114,40 @@ export default {
     return {
       valid: false,
       extractUrl: null,
+      recipe: null,
       urlRules: [
         (value) => !!value || 'Required.',
         (value) => this.isValidHttpUrl(value) || 'URL is not valid',
       ],
+      recipeNotFound: false,
     }
+  },
+
+  computed: {
+    ingredients() {
+      return this.recipe.recipeIngredient
+    },
+    instructions() {
+      if (typeof this.recipe.recipeInstructions !== 'string') {
+        return this.recipe.recipeInstructions
+      } else {
+        const instructionsObj = { text: this.recipe.recipeInstructions }
+        const arrayOfOne = []
+        arrayOfOne.push(instructionsObj)
+        return arrayOfOne
+      }
+    },
+    validRecipe() {
+      console.log('Ingredients' + typeof this.ingredients)
+      if (typeof this.ingredients !== 'object') {
+        return false
+      }
+      console.log('Instructions' + typeof this.instructions)
+      if (typeof this.instructions !== 'object') {
+        return false
+      }
+      return true
+    },
   },
   methods: {
     isURL(str) {
@@ -88,11 +163,21 @@ export default {
     },
 
     async extractRecipe() {
-      const payload = {
-        url: this.extractUrl,
-      }
-      const response = await this.$axios.post('/pantry/extractrecipe/', payload)
-      console.log(response)
+      await this.$axios
+        .get(`/pantry/extractrecipe/?url=${this.extractUrl}`)
+        .then((response) => {
+          console.log(response)
+          if (response.data !== 'Recipe data not found') {
+            this.recipeNotFound = false
+            this.recipe = response.data
+          } else {
+            this.recipe = null
+            this.recipeNotFound = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
 
     isValidHttpUrl(string) {
@@ -106,7 +191,38 @@ export default {
 
       return url.protocol === 'http:' || url.protocol === 'https:'
     },
+
+    async CreateRecipe() {
+      const payload = {
+        title: this.recipe.headline,
+        summary: this.recipe.description,
+        user: this.$auth.user.id,
+      }
+      const response = await this.$axios.post('/pantry/myrecipes/', payload)
+      await this.createChildren(response.data.recipe_id)
+      this.$router.push(`/results/${response.data.recipe_id}/`)
+    },
+
+    createChildren(recipeId) {
+      this.instructions.forEach((item, index) => {
+        const instruction = {
+          step: index + 1,
+          instruction: item.text,
+          recipe: recipeId,
+        }
+        this.$axios.post('/pantry/instructions/', instruction)
+      })
+
+      this.ingredients.forEach((item, index) => {
+        const ingredient = {
+          name: item,
+          recipe: recipeId,
+        }
+        this.$axios.post('/pantry/ingredients/', ingredient)
+      })
+    },
   },
+
   head() {
     return {
       title: 'Search Recipes',
