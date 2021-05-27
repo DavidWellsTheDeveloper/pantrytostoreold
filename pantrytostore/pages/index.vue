@@ -37,6 +37,32 @@
 export default {
   auth: false,
   name: 'Home',
+  data() {
+    return {
+      supportedExtraction: [
+        {
+          name: 'Food Network',
+          url: 'https://www.foodnetwork.com/',
+        },
+        {
+          name: 'Delish',
+          url: 'https://www.delish.com/',
+        },
+        {
+          name: 'All Recipes',
+          url: 'https://www.allrecipes.com/',
+        },
+        {
+          name: 'Damn Delicious',
+          url: 'https://damndelicious.net/',
+        },
+        {
+          name: 'Food.com',
+          url: 'https://www.food.com/',
+        },
+      ],
+    }
+  },
   head() {
     return {
       title: 'Home',

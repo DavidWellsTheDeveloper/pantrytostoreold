@@ -75,17 +75,19 @@
 export default {
   name: 'MyRecipes',
 
-  // Fetch (rather than asyncData) to avoid page error when permission fails
-  async fetch() {
-    this.recipes = await this.$axios.$get('/pantry/myrecipes/')
-  },
-
   data() {
     return {
       dialog: false,
       recipes: null,
     }
   },
+
+  mounted() {
+    this.$axios.$get('/pantry/myrecipes/').then((response) => {
+      this.recipes = response
+    })
+  },
+
   methods: {
     async deleteRecipe(id) {
       await this.$axios.delete(`/pantry/myrecipes/${id}/`)
